@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Invertible Bloom Lookup Table Demo</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1>Interactive Invertible Bloom Lookup Table Demo</h1>
+    <p>Add items to both IBLTs. Subtracting from both IBLTs recovers the symmetric difference (A △ B). Using recommended k value will give the best chance of full recovery. Recommended k value is log_2 (m/n).</p>
+    <div class="config">
+        <label>Table size (m):
+            <input type="number" id="tableSizeInput" value="6" min="4" max="32">
+        </label>
+        <label>Hash functions (k):
+            <input type="number" id="hashFunctionsInput" value="3" min="2" max="5">
+        </label>
+        <button id="updateConfigBtn" class="button">Update Configuration</button>
+        <button id="subtractBtn" class="button">Subtract and Recover Difference (A △ B)</button>
+        <label class="binary-toggle">
+            <input type="checkbox" id="showBinaryBtn"> Show Binary
+        </label>
+    </div>
+
+    <div class="status-bar">
+        <div class="status-text">Capacity: <span id="capacityText">0/0 items (0%)</span></div>
+        <div class="capacity-meter">
+            <div class="capacity-fill" id="capacityFill"></div>
+        </div>
+    </div>
+
+    <div class="notification" id="hashRecommendation">
+        <span id="recommendationText"></span>
+        <button class="apply-btn" id="applyRecommendationBtn">Apply</button>
+    </div>
+
+    <div id="viz"></div>
+
+    <div>
+        <select id="ibltSelector" class="button">
+            <option value="A">IBLT A</option>
+            <option value="B">IBLT B</option>
+        </select>
+        <input type="number" id="keyInput" placeholder="Enter key">
+        <input type="number" id="valueInput" placeholder="Enter value">
+        <button id="insertBtn" class="button">Insert</button>
+        <button id="peelBtn" class="button">Peel</button>
+    </div>
+
+    <div class="tables">
+        <div class="iblt-tables">
+            <div class="iblt-column">
+                <h3>IBLT A</h3>
+                <table id="insertedTable">
+                    <thead>
+                        <tr>
+                            <th>Inserted Items</th>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+                <table id="recoveredTable">
+                    <thead>
+                        <tr>
+                            <th>Recovered Items</th>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="iblt-column">
+                <h3>IBLT B</h3>
+                <table id="insertedTableB">
+                    <thead>
+                        <tr>
+                            <th>Inserted Items</th>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="differenceTable" style="display: none;">
+            <h3>Set Difference (A △ B)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Key</th>
+                        <th>Value</th>
+                        <th>Source</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="siphash.js"></script>
+    <script src="iblt.js"></script>
+</body>
+</html>
